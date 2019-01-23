@@ -1,57 +1,27 @@
 import random
 import string
-import pyperclip
+from Password import *
 
-dict_passwordReqs = {}
-
-def GeneratePassword(dict_passwordReqs = [], numOfPasswords = 1):
-    retPasswords = []
+def NewPasswordGenerator(numOfPasswords = 1):
     
-    UserInput = PullInput(dict_passwordReqs)
-    
-    for num in list(range(numOfPasswords)):
-        retPassword = GenerateRandomString(dict_passwordReqs, UserInput)
-        if (num == 0):
-            pyperclip.copy(retPassword)
-        retPasswords.append(retPassword)
+    U1 = UserInput('What\'s the minimum length?', string.ascii_letters)
+    U2 = UserInput('How many special characters?', '!@#$%^&*)-')
+    U3 = UserInput('How many numbers?', '0123456789')
+    User_Input_List = [U1, U2, U3]
 
-    return retPasswords
+    for x in User_Input_List:
+        x.poll_user_input()
 
-def PullInput(dict_passwordReqs = {}):
-    retInput = []
-    for key, value in dict_passwordReqs.items():
-        Input = input(key)
-        if(Input == ''):
-            retInput.append(0)
-        else:
-            retInput.append(int(input(key)))
-    return retInput
+    for y in range(numOfPasswords):
+        password_final = Password()
 
-def GenerateRandomString(dict_passwordReqs = {}, UserInput = {}):
-    Password = ''
-    i = 0
-    for key,value in dict_passwordReqs.items():
-        for x in list(range(int(UserInput[i]))):
-            random.seed()
-            Password = Password + ''.join(random.choice(value))
-        i += 1
-    return PasswordRandomzier(Password)
+        for x in User_Input_List:
+            x.generate_random_string()
+            password_final.generate_simple_password(x)
 
-def PasswordRandomzier(password):   
-    return ''.join(random.sample(password,len(password)))
+        print(password_final.generate_random_password())
 
-def PasswordGenerator(numOfPasswords = 1):
-    dict_passwordReqs['What\'s the minimum length?'] = string.ascii_letters
-    dict_passwordReqs['How many special characters?'] = '!@#$%^&*)-'
-    dict_passwordReqs['How many numbers?'] = '0123456789'
-
-    print ('Hi there, we will generate a password. Please answer the following')
-
-    print ('Below are three possible passwords. The first password is copied to your clipboard')
-
-    for value in GeneratePassword(dict_passwordReqs):
-        print(value)
     return
 
-PasswordGenerator()
+NewPasswordGenerator()
     
